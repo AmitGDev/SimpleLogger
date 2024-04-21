@@ -28,10 +28,21 @@
 #include <shared_mutex>
 #include <syncstream>
 #include <iostream>
+#include <array>
 
 
-// Macro for logging
-#define LOG SimpleLogger()
+// Macros for logging__
+
+#define LOG(severity) SimpleLogger(severity)
+
+// Severities:
+#define DEBUG SimpleLogger::Severity::kDebug
+#define INFO SimpleLogger::Severity::kInfo
+#define WARNING SimpleLogger::Severity::kWarning
+#define ERROR SimpleLogger::Severity::kError
+#define CRITICAL SimpleLogger::Severity::kCritical
+
+// __Macros for logging
 
 
 // SimpleLogger class provides a simple logging utility for C++20 programs. 
@@ -46,9 +57,12 @@ public:
     // Prefix function signature
     using PrefixFunction = std::function<std::wstring()>;
 
+    enum class Severity : uint8_t { kDebug, kInfo, kWarning, kError, kCritical }; // Bounds: 0-4.
+    const std::array<std::wstring, 5> severity_map{ L"DEBUG", L"INFO", L"WARNING", L"ERROR", L"CRITICAL" };
+
 
     // Constructor
-    SimpleLogger(bool newline = true) : newline_(newline)
+    SimpleLogger(Severity severity = Severity::kDebug, bool newline = true) : newline_(newline)
     {
         std::shared_lock lock(mutex_);
 
@@ -65,6 +79,8 @@ public:
                 for (const auto& prefix : prefix_function_list_) {
                     *out_sync_stream_.get() << prefix();
                 }
+
+                *out_sync_stream_.get() << severity_map.at(static_cast<size_t>(severity)) << L": ";
             }
             catch (const std::exception& e)
             {

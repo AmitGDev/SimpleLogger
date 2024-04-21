@@ -33,7 +33,7 @@ static std::wstring DateTimePrefix()
     localtime_s(&time_info, &in_time_t);
 
     std::wstringstream wstring_stream{};
-    wstring_stream << std::put_time(&time_info, L"[%d-%m-%Y %X] ");
+    wstring_stream << std::put_time(&time_info, L"%d-%m-%Y %X ");
 
     return wstring_stream.str();
 }
@@ -60,8 +60,9 @@ int main()
         sync_cerr << "caught exception: " << e.what() << std::endl;
     }
 
-    LOG << L"Line " << 1;
-    LOG << L"Line " << 2;
-    LOG << L"Pi = " << 3.14159265359;
-    LOG << L"Line " << L"End";
+    LOG() << 10;
+    LOG(DEBUG) << L"Line " << 1;
+    LOG(DEBUG) << L"Line " << 2;
+    LOG(DEBUG) << L"Pi = " << 3.14159265359;
+    LOG(DEBUG) << L"Line " << L"End";
 }
