@@ -60,9 +60,9 @@ int main()
         sync_cerr << "caught exception: " << e.what() << std::endl;
     }
 
-    LOG() << 10;
     LOG(DEBUG) << L"Line " << 1;
-    LOG(DEBUG) << L"Line " << 2;
-    LOG(DEBUG) << L"Pi = " << 3.14159265359;
-    LOG(DEBUG) << L"Line " << L"End";
+    LOG(INFO) << L"Line " << 2;
+    LOG(WARNING) << L"Pi = " << 3.14159265359;
+    LOG(ERROR) << L"Divide by zero";
+    LOG(CRITICAL) << L"Line " << L"End";
 }
